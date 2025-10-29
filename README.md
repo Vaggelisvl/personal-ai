@@ -17,6 +17,61 @@ An AI model trained on Evangelos Vrailas's CV data that can answer questions abo
 - World capitals
 - General greetings and small talk
 
+## Quick Start
+
+**Run the demo** to see all capabilities:
+```bash
+python demo.py
+```
+
+**Run the test suite** to verify everything works:
+```bash
+python test_ai_model.py
+```
+
+**Interactive mode** for asking your own questions:
+```bash
+python ai_model.py
+```
+
+## What the Model Covers
+
+The AI model is trained on comprehensive CV data including:
+
+### Personal Information
+- Full name, title, and location
+- Contact information (email, LinkedIn, portfolio)
+
+### Professional Experience
+1. **Full Stack Developer** at Netcompany-Intrasoft (Oct 2024 - Present)
+   - Java 17, Spring Boot, React, Angular
+   - Kubernetes, RabbitMQ, microservices
+   - Cross-team collaboration
+
+2. **Junior Software Developer** at Public Group (2022 - 2024)
+   - Enterprise applications with Java and Spring Boot
+   - ActiveMQ and RabbitMQ messaging
+   - MongoDB, Oracle, SQL Server databases
+
+3. **Computer Science Professor Assistant** at NKUA (2021 - 2022)
+   - Data structures and programming techniques
+   - C programming and algorithm design
+
+### Technical Skills
+- **Languages**: Java (11, 17, 21), C++, SQL, Python
+- **Frameworks**: Spring Boot, ReactJS, Angular
+- **Messaging**: RabbitMQ, ActiveMQ
+- **Databases**: Oracle, MongoDB, Microsoft SQL Server, NoSQL
+- **DevOps**: Docker, Kubernetes, Git, CI/CD (Bitbucket, Azure DevOps), Jira
+- **Practices**: Clean code, TDD, Agile (Scrum), CI/CD
+
+### Education
+- Bachelor's in Informatics and Telecommunications
+- National and Kapodistrian University of Athens (2019-2024)
+
+### Certifications
+- Public Next Graduate Program (500-hour comprehensive training)
+
 ## Installation
 
 1. Clone the repository:
