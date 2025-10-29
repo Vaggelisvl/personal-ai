@@ -72,19 +72,25 @@ class PersonalAIModel:
         """Find the best matching Q&A pair."""
         best_match = None
         best_score = 0.0
+        best_question = None
         
         normalized_query = self._normalize_text(query)
         
         for question, answer in self.qa_pairs.items():
+            # Longer, more specific questions should score higher
             # Check for substring match first (more accurate for short queries)
-            if question in normalized_query or normalized_query in question:
-                score = 0.9
+            if question in normalized_query:
+                # Give higher score to longer matches (more specific)
+                score = 0.9 + (len(question) / 100.0)  # Bonus for length
+            elif normalized_query in question:
+                score = 0.8
             else:
                 score = self._calculate_similarity(normalized_query, question)
             
             if score > best_score:
                 best_score = score
                 best_match = answer
+                best_question = question
         
         # Return match if score is above threshold
         if best_score > 0.25:
@@ -124,9 +130,9 @@ class PersonalAIModel:
         """Answer general questions not specific to the CV."""
         normalized = self._normalize_text(query)
         
-        # Skip if it's clearly a CV-specific question
-        cv_keywords = ['you', 'your', 'evangelos', 'vrailas', 'work', 'job', 'experience', 
-                       'skill', 'education', 'study', 'email', 'contact']
+        # Skip if it's clearly a CV-specific question (but allow tech-specific experience questions)
+        cv_keywords = ['your email', 'your contact', 'where do you', 'your name', 'who are you',
+                       'your job', 'where did you study', 'your education', 'tell me about you']
         if any(keyword in normalized for keyword in cv_keywords):
             return None
         
@@ -135,8 +141,9 @@ class PersonalAIModel:
         if any(greet in normalized for greet in greetings) and len(normalized.split()) <= 3:
             return "Hello! I'm an AI assistant trained on Evangelos Vrailas's CV. I can answer questions about his background, skills, experience, and general questions too. How can I help you?"
         
-        # Time/Date
-        if any(word in normalized for word in ['time', 'date', 'today', 'now']):
+        # Time/Date (but not "do you know")
+        time_date_words = ['what time', 'what date', 'what is today', 'what is now']
+        if any(word in normalized for word in time_date_words):
             from datetime import datetime
             return f"I don't have access to real-time information, but I can answer questions about Evangelos Vrailas's background and general knowledge."
         

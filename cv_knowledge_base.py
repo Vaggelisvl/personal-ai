@@ -115,6 +115,8 @@ QA_PAIRS = {
     "kubernetes": "Yes, I have extensive experience with Kubernetes. I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
     "kubernetes experience": "Yes, I have extensive experience with Kubernetes. I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
     "experience with kubernetes": "Yes, I have extensive experience with Kubernetes. I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
+    "do you have experience with kubernetes": "Yes, I have extensive experience with Kubernetes. I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
+    "what experience do you have with kubernetes": "Yes, I have extensive experience with Kubernetes. I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
     "k8s": "Yes, I have extensive experience with Kubernetes (K8s). I deploy and monitor microservices in K8s clusters, implement metrics collection, alerting, and system health dashboards.",
     "rabbitmq": "Yes, I have designed and implemented asynchronous messaging solutions using RabbitMQ for robust, scalable inter-service communication.",
     "spring boot": "Yes, I specialize in Spring Boot and have extensive experience developing and maintaining backend services using Spring Boot with Java 11, 17, and 21.",
