@@ -23,6 +23,12 @@ wheels/
 .installed.cfg
 *.egg
 
+# Trained models
+cv_model_simple/
+cv_model/
+*.pt
+*.pkl
+
 # IDE
 .vscode/
 .idea/

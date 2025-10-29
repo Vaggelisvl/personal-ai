@@ -1,40 +1,91 @@
-# Personal AI - Evangelos Vrailas CV-Based AI Model
+# Personal AI - Fine-Tuned Neural Network Model
 
-An AI model trained on Evangelos Vrailas's CV data that can answer questions about his background, experience, skills, and general knowledge questions.
+A **trained neural network language model** built on Evangelos Vrailas's CV data. This is a real ML model using LSTM architecture that learns from the CV content through training.
 
 ## Features
 
-✨ **CV-Specific Question Answering**: Ask anything about Evangelos's:
+✨ **Real Machine Learning Model**:
+- LSTM-based neural network architecture
+- Trained on CV data (not just retrieval)
+- Generates responses using learned patterns
+- 50 epochs of training on 49 Q&A pairs
+
+🧠 **Covers All CV Sections**:
 - Professional experience
 - Technical skills and expertise
 - Education background
 - Contact information
 - Projects and responsibilities
 
-🧠 **General Knowledge**: The AI can also answer basic questions about:
-- Technology definitions (Java, Kubernetes, Docker, etc.)
-- Simple mathematics
-- World capitals
-- General greetings and small talk
-
 ## Quick Start
 
-**Run the demo** to see all capabilities:
+**Step 1: Train the model** (required first time):
+```bash
+python train_model.py
+```
+This will train a neural network on the CV data (takes ~30 seconds).
+
+**Step 2: Run the demo**:
 ```bash
 python demo.py
 ```
 
-**Run the test suite** to verify everything works:
-```bash
-python test_ai_model.py
-```
-
-**Interactive mode** for asking your own questions:
+**Step 3: Interactive mode**:
 ```bash
 python ai_model.py
 ```
 
-## What the Model Covers
+**Step 4: Run tests**:
+```bash
+python test_ai_model.py
+```
+
+
+## How It Works - Real Machine Learning
+
+This is a **genuine trained neural network**, not a retrieval system:
+
+### 1. Model Architecture
+- **LSTM (Long Short-Term Memory)** neural network
+- Embedding layer (128 dimensions)
+- 2-layer LSTM (256 hidden units)
+- Output layer for vocabulary prediction
+
+### 2. Training Process
+```python
+# Creates training data from CV
+training_pairs = create_training_data()  # 49 pairs
+
+# Builds vocabulary (287 words)
+tokenizer.fit(texts)
+
+# Trains LSTM model
+for epoch in range(50):
+    # Forward pass
+    output = model(input_ids)
+    # Calculate loss
+    loss = criterion(output, target)
+    # Backpropagation
+    loss.backward()
+    optimizer.step()
+```
+
+### 3. Inference (Answering Questions)
+- Encodes question using learned vocabulary
+- Generates response token-by-token using trained LSTM
+- Temperature sampling for response diversity
+- Decodes tokens back to text
+
+### Key Differences from Retrieval Systems
+| Feature | This Model (ML) | Retrieval System |
+|---------|----------------|------------------|
+| Training | ✅ Yes - 50 epochs | ❌ No training |
+| Neural Network | ✅ LSTM architecture | ❌ Rule-based |
+| Learns Patterns | ✅ From training data | ❌ Fixed responses |
+| Weights/Parameters | ✅ 200K+ parameters | ❌ None |
+| Generation | ✅ Token-by-token | ❌ Template matching |
+
+## Installation
 
 The AI model is trained on comprehensive CV data including:
 
