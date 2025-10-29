@@ -124,17 +124,26 @@ def create_training_data():
     return training_pairs
 
 
-def train_model(output_dir="./cv_model_simple", num_epochs=50, batch_size=4):
+def train_model(output_dir="./cv_model_simple", num_epochs=150, batch_size=4):
     """Train a simple neural language model on CV data"""
     
     print("=" * 80)
-    print("Training Simple Neural Language Model on CV Data")
+    print("Training Pure AI Neural Language Model on CV Data")
     print("=" * 80)
     
     # Create training data
     print("\n1. Creating training data...")
     training_pairs = create_training_data()
-    print(f"   Created {len(training_pairs)} training pairs")
+    
+    # Augment by repeating for better learning
+    augmented_pairs = []
+    for q, a in training_pairs:
+        # Add each pair 3 times for better memorization
+        for _ in range(3):
+            augmented_pairs.append((q, a))
+    
+    training_pairs = augmented_pairs
+    print(f"   Created {len(training_pairs)} training pairs (with augmentation)")
     
     # Build tokenizer
     print("\n2. Building vocabulary...")
@@ -161,7 +170,7 @@ def train_model(output_dir="./cv_model_simple", num_epochs=50, batch_size=4):
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     
     # Training loop
-    print("\n5. Training...")
+    print(f"\n5. Training for {num_epochs} epochs...")
     model.train()
     
     for epoch in range(num_epochs):
@@ -186,7 +195,7 @@ def train_model(output_dir="./cv_model_simple", num_epochs=50, batch_size=4):
             
             total_loss += loss.item()
         
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 25 == 0:
             avg_loss = total_loss / (len(train_data) / batch_size)
             print(f"   Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
     

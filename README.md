@@ -1,44 +1,42 @@
-# Personal AI - Fine-Tuned Neural Network Model
+# Personal AI - Pure Neural Network Model
 
-A **trained neural network language model** built on Evangelos Vrailas's CV data. This is a real ML model using LSTM architecture that learns from the CV content through training.
+A **pure AI neural network model** trained on Evangelos Vrailas's CV data. This is a real LSTM-based model that learns through training - no knowledge base fallbacks, no retrieval systems, just pure machine learning.
+
+## ⚠️ Important Note
+
+This is a **pure AI implementation** - it uses ONLY the neural network for responses, without any knowledge base lookups. The current architecture is simple (LSTM-based language model), so responses may not always be perfectly accurate. 
+
+**For production use**, a hybrid approach (neural network + knowledge base) would provide better accuracy. However, this implementation demonstrates a genuine trained ML model.
 
 ## Features
 
-✨ **Real Machine Learning Model**:
-- LSTM-based neural network architecture
-- Trained on CV data (not just retrieval)
-- Generates responses using learned patterns
-- 50 epochs of training on 49 Q&A pairs
+✨ **100% Pure AI**:
+- LSTM neural network architecture
+- Trained for 150 epochs on augmented CV data
+- NO knowledge base fallbacks
+- NO retrieval systems
+- Purely neural generation
 
-🧠 **Covers All CV Sections**:
-- Professional experience
-- Technical skills and expertise
-- Education background
-- Contact information
-- Projects and responsibilities
+🧠 **Real Machine Learning**:
+- 200K+ trainable parameters
+- Embedding → 2-layer LSTM → Output
+- Temperature-based sampling
+- Token-by-token generation
 
 ## Quick Start
 
-**Step 1: Train the model** (required first time):
+**Step 1: Train the pure AI model**:
 ```bash
 python train_model.py
 ```
-This will train a neural network on the CV data (takes ~30 seconds).
+This trains the neural network for 150 epochs (~1-2 minutes).
 
-**Step 2: Run the demo**:
-```bash
-python demo.py
-```
-
-**Step 3: Interactive mode**:
+**Step 2: Interactive Q&A**:
 ```bash
 python ai_model.py
 ```
 
-**Step 4: Run tests**:
-```bash
-python test_ai_model.py
-```
+**Note**: Responses are generated purely by the neural network and may vary between runs due to sampling.
 
 
 ## How It Works - Real Machine Learning

@@ -121,9 +121,9 @@ class PersonalAIModel:
             traceback.print_exc()
             self.model = None
     
-    def answer(self, question: str, max_length: int = 50, temperature: float = 0.8) -> str:
+    def answer(self, question: str, max_length: int = 50, temperature: float = 0.7) -> str:
         """
-        Answer a question using the trained model.
+        Answer a question using ONLY the trained neural network (pure ML).
         
         Args:
             question: The question to answer
@@ -139,58 +139,15 @@ class PersonalAIModel:
         if self.model is None or self.tokenizer is None:
             return "❌ Model not loaded. Please train the model first with 'python train_model.py'"
         
-        # First try direct knowledge base lookup for better accuracy
-        from cv_knowledge_base import QA_PAIRS, CV_DATA
-        import re
-        
-        # Normalize question - remove punctuation and extra spaces
-        question_lower = re.sub(r'[^\w\s]', '', question.lower()).strip()
-        
-        # Special handling for common questions
-        if "tell me about" in question_lower and "yourself" in question_lower:
-            pi = CV_DATA['personal_info']
-            return f"I am {pi['name']}, a {pi['title']} based in {pi['location']}. {CV_DATA['summary']}"
-        
-        # Direct match
-        if question_lower in QA_PAIRS:
-            return QA_PAIRS[question_lower]
-        
-        # Partial match with better scoring - prioritize substring and exact matches
-        best_match = None
-        best_score = 0
-        for q, a in QA_PAIRS.items():
-            score = 0
-            
-            # Boost exact matches of key phrases
-            if q == question_lower:
-                score = 2.0  # Highest priority
-            elif q in question_lower:
-                # Key is in question - very good match
-                score = 1.5 + (len(q) / len(question_lower))
-            elif question_lower in q:
-                # Question is in key
-                score = 1.3
-            else:
-                # Word overlap scoring
-                q_words = set(q.split())
-                question_words = set(question_lower.split())
-                overlap = len(q_words & question_words)
-                score = overlap / max(len(q_words), len(question_words)) if question_words else 0
-            
-            if score > best_score:
-                best_score = score
-                best_match = a
-        
-        if best_match and best_score > 0.4:  # Threshold for accepting match
-            return best_match
-        
-        # If no good match, try model generation (but it's not as accurate)
         try:
-            # Encode question
-            input_ids = self.tokenizer.encode(f"question {question_lower}", max_length=30)
-            input_tensor = torch.tensor([input_ids])
+            # Pure ML approach - ONLY use the neural network
+            import re
+            question_lower = re.sub(r'[^\w\s]', '', question.lower()).strip()
             
-            # Generate response
+            # Encode question with "question" prefix (as trained)
+            input_ids = self.tokenizer.encode(f"question {question_lower}", max_length=30)
+            
+            # Generate response using neural network
             self.model.eval()
             with torch.no_grad():
                 # Start with START token
@@ -201,7 +158,7 @@ class PersonalAIModel:
                     input_tok = torch.tensor([[generated[-1]]])
                     output, hidden = self.model(input_tok, hidden)
                     
-                    # Apply temperature
+                    # Apply temperature for sampling
                     logits = output[0, -1] / temperature
                     probs = torch.softmax(logits, dim=0)
                     
@@ -215,17 +172,17 @@ class PersonalAIModel:
                     
                     generated.append(next_token)
                 
-                # Decode
+                # Decode the generated tokens
                 answer = self.tokenizer.decode(generated)
                 
-                if answer and len(answer.split()) >= 3:
+                # Return the neural network's response
+                if answer and len(answer.strip()) > 0:
                     return answer.strip()
+                else:
+                    return "I need more training data to answer that question."
                 
         except Exception as e:
-            pass
-        
-        # Final fallback
-        return "I don't have enough information to answer that specific question. Please ask about my experience, skills, education, or current work at Netcompany-Intrasoft."
+            return f"Error generating answer: {e}"
     
     def get_cv_summary(self) -> str:
         """Get a summary of the CV using the model"""
