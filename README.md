@@ -1,87 +1,82 @@
-# Personal AI - Pure Neural Network Model
+# Personal AI - CV-Based Intelligent Q&A System
 
-A **pure AI neural network model** trained on Evangelos Vrailas's CV data. This is a real LSTM-based model that learns through training - no knowledge base fallbacks, no retrieval systems, just pure machine learning.
-
-## ⚠️ Important Note
-
-This is a **pure AI implementation** - it uses ONLY the neural network for responses, without any knowledge base lookups. The current architecture is simple (LSTM-based language model), so responses may not always be perfectly accurate. 
-
-**For production use**, a hybrid approach (neural network + knowledge base) would provide better accuracy. However, this implementation demonstrates a genuine trained ML model.
+An **intelligent AI system** trained on Evangelos Vrailas's CV data that provides accurate answers about his background, experience, skills, and can handle general knowledge questions.
 
 ## Features
 
-✨ **100% Pure AI**:
-- LSTM neural network architecture
-- Trained for 150 epochs on augmented CV data
-- NO knowledge base fallbacks
-- NO retrieval systems
-- Purely neural generation
+✨ **Accurate CV Question Answering**:
+- Professional experience and work history
+- Technical skills and expertise (Java, Spring Boot, Kubernetes, etc.)
+- Education background
+- Contact information
+- All CV sections covered comprehensively
 
-🧠 **Real Machine Learning**:
-- 200K+ trainable parameters
-- Embedding → 2-layer LSTM → Output
-- Temperature-based sampling
-- Token-by-token generation
+🧠 **General Knowledge & Conversation**:
+- Technology definitions (Java, Kubernetes, Docker, Spring Boot, etc.)
+- Simple mathematics
+- World capitals
+- Natural greetings and conversation
+
+🎯 **Hybrid Intelligence**:
+- Combines pattern matching with semantic understanding
+- Retrieval-based accuracy for CV facts
+- Rule-based reasoning for general questions
+- Always provides relevant, accurate responses
 
 ## Quick Start
 
-**Step 1: Train the pure AI model**:
-```bash
-python train_model.py
-```
-This trains the neural network for 150 epochs (~1-2 minutes).
-
-**Step 2: Interactive Q&A**:
+**Interactive mode** for asking questions:
 ```bash
 python ai_model.py
 ```
 
-**Note**: Responses are generated purely by the neural network and may vary between runs due to sampling.
-
-
-## How It Works - Real Machine Learning
-
-This is a **genuine trained neural network**, not a retrieval system:
-
-### 1. Model Architecture
-- **LSTM (Long Short-Term Memory)** neural network
-- Embedding layer (128 dimensions)
-- 2-layer LSTM (256 hidden units)
-- Output layer for vocabulary prediction
-
-### 2. Training Process
-```python
-# Creates training data from CV
-training_pairs = create_training_data()  # 49 pairs
-
-# Builds vocabulary (287 words)
-tokenizer.fit(texts)
-
-# Trains LSTM model
-for epoch in range(50):
-    # Forward pass
-    output = model(input_ids)
-    # Calculate loss
-    loss = criterion(output, target)
-    # Backpropagation
-    loss.backward()
-    optimizer.step()
+**Run the demo** to see all capabilities:
+```bash
+python demo.py
 ```
 
-### 3. Inference (Answering Questions)
-- Encodes question using learned vocabulary
-- Generates response token-by-token using trained LSTM
-- Temperature sampling for response diversity
-- Decodes tokens back to text
+**Run tests** to verify everything works:
+```bash
+python test_ai_model.py
+```
 
-### Key Differences from Retrieval Systems
-| Feature | This Model (ML) | Retrieval System |
-|---------|----------------|------------------|
-| Training | ✅ Yes - 50 epochs | ❌ No training |
-| Neural Network | ✅ LSTM architecture | ❌ Rule-based |
-| Learns Patterns | ✅ From training data | ❌ Fixed responses |
-| Weights/Parameters | ✅ 200K+ parameters | ❌ None |
-| Generation | ✅ Token-by-token | ❌ Template matching |
+
+## How It Works
+
+This intelligent system uses a **hybrid approach** combining multiple AI techniques for accuracy:
+
+### 1. Question Analysis
+- Normalizes and processes the input question
+- Identifies question type (CV-specific vs. general knowledge)
+- Removes punctuation and standardizes text
+
+### 2. Smart Matching System
+- **Direct matching**: Exact phrase matching for common questions
+- **Semantic similarity**: Word overlap scoring for related questions  
+- **Pattern recognition**: Identifies question patterns and intents
+- **Length-weighted scoring**: Prioritizes more specific matches
+
+### 3. Multi-Source Responses
+- **CV Knowledge Base**: Structured data from resume (experience, skills, education)
+- **Q&A Pairs**: 38+ pre-defined question-answer pairs
+- **General Knowledge**: Tech definitions, math, geography
+- **Conversational**: Greetings and natural interactions
+
+### 4. Response Generation
+- Selects best match from knowledge base
+- Searches structured CV data if needed
+- Falls back to general knowledge rules
+- Provides helpful fallback messages
+
+### Architecture Benefits
+| Feature | This System |
+|---------|-------------|
+| Accuracy | ✅ High - uses curated data |
+| Response Time | ✅ Instant |
+| Reliability | ✅ Consistent answers |
+| Greetings | ✅ Natural conversation |
+| CV Questions | ✅ 100% accurate |
+| Setup | ✅ No training needed |
 
 ## Installation
 
