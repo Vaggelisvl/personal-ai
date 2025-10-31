@@ -1,21 +1,22 @@
 # Personal AI - Real Seq2Seq Neural Network Model
 
-A **real trained neural network** (Seq2Seq with Attention) that learns to answer questions about Evangelos Vrailas's CV through actual training, not retrieval.
+A **real trained neural network** (Seq2Seq with Attention) trained on comprehensive CV data to handle recruiter questions, technical interviews, and general conversation.
 
 ## Features
 
 ✨ **Real Neural Network**:
 - Seq2Seq architecture with Attention mechanism
 - Encoder-Decoder with LSTM layers
-- Trained for 50 epochs on CV Q&A pairs
-- 277-token vocabulary learned from CV data
-- Real backpropagation and gradient descent
+- Trained for 40 epochs on expanded dataset
+- 569-token vocabulary learned from CV data
+- Handles greetings, recruiter questions, and technical questions
 
-🧠 **Genuine Machine Learning**:
-- Encoder: Embeds questions into hidden representations
-- Attention: Focuses on relevant parts of the input
-- Decoder: Generates answers token-by-token
-- No retrieval, no templates, pure neural generation
+🧠 **Comprehensive Training Data**:
+- **Greetings**: Hi, Hello, How are you, etc.
+- **Recruiter Questions**: Why should we hire you, What are your strengths, Tell me about yourself, etc.
+- **Technical Questions**: Do you know Java/Spring Boot/Kubernetes, What's your tech stack, etc.
+- **CV Information**: Work history, education, skills, experience
+- **Total**: 100+ unique Q&A pairs, 216 training examples with augmentation
 
 ## Quick Start
 
@@ -36,9 +37,24 @@ This is a **real trained AI model**:
 - **Encoder**: LSTM that processes questions
 - **Attention**: Mechanism to focus on relevant input parts
 - **Decoder**: LSTM that generates answers
-- **Training**: 50 epochs with teacher forcing
+- **Training**: 40 epochs with teacher forcing
 - **Loss**: Cross-entropy with gradient clipping
-- **Optimizer**: Adam with learning rate 0.001
+- **Optimizer**: Adam (lr=0.001)
+- **Vocabulary**: 569 tokens
+
+## Example Responses
+
+**Greetings:**
+- "Hi" → "I'm Evangelos Vrailas, a Software Developer..."
+- "How are you?" → "I'm doing great! I'm a Software Developer specializing in Java and Spring Boot."
+
+**Recruiter Questions:**
+- "Why should I hire you?" → "I have deep expertise in Java development, experience with modern cloud technologies..."
+- "What are your strengths?" → "My strengths include deep Java and Spring Boot expertise, strong problem-solving skills..."
+
+**Technical Questions:**
+- "Do you know Spring Boot?" → "Yes, Spring Boot is my main framework. I use it to build robust, production-ready systems..."
+- "Tell me about your experience" → "I have professional software development experience since 2021. I've worked as a Full Stack Developer..."
 
 
 ## Example Usage
