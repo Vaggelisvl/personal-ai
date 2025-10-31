@@ -26,8 +26,12 @@ wheels/
 # Trained models
 cv_model_simple/
 cv_model/
+cv_seq2seq_model/
 *.pt
 *.pkl
+
+# Hybrid backup
+ai_model_hybrid.py
 
 # IDE
 .vscode/

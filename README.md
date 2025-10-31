@@ -1,82 +1,63 @@
-# Personal AI - CV-Based Intelligent Q&A System
+# Personal AI - Real Seq2Seq Neural Network Model
 
-An **intelligent AI system** trained on Evangelos Vrailas's CV data that provides accurate answers about his background, experience, skills, and can handle general knowledge questions.
+A **real trained neural network** (Seq2Seq with Attention) that learns to answer questions about Evangelos Vrailas's CV through actual training, not retrieval.
 
 ## Features
 
-✨ **Accurate CV Question Answering**:
-- Professional experience and work history
-- Technical skills and expertise (Java, Spring Boot, Kubernetes, etc.)
-- Education background
-- Contact information
-- All CV sections covered comprehensively
+✨ **Real Neural Network**:
+- Seq2Seq architecture with Attention mechanism
+- Encoder-Decoder with LSTM layers
+- Trained for 50 epochs on CV Q&A pairs
+- 277-token vocabulary learned from CV data
+- Real backpropagation and gradient descent
 
-🧠 **General Knowledge & Conversation**:
-- Technology definitions (Java, Kubernetes, Docker, Spring Boot, etc.)
-- Simple mathematics
-- World capitals
-- Natural greetings and conversation
-
-🎯 **Hybrid Intelligence**:
-- Combines pattern matching with semantic understanding
-- Retrieval-based accuracy for CV facts
-- Rule-based reasoning for general questions
-- Always provides relevant, accurate responses
+🧠 **Genuine Machine Learning**:
+- Encoder: Embeds questions into hidden representations
+- Attention: Focuses on relevant parts of the input
+- Decoder: Generates answers token-by-token
+- No retrieval, no templates, pure neural generation
 
 ## Quick Start
 
-**Interactive mode** for asking questions:
+**Step 1: Train the model** (required first time):
+```bash
+python train_seq2seq.py
+```
+This trains the Seq2Seq neural network (~5-10 minutes).
+
+**Step 2: Use the trained model**:
 ```bash
 python ai_model.py
 ```
 
-**Run the demo** to see all capabilities:
-```bash
-python demo.py
+## Architecture
+
+This is a **real trained AI model**:
+- **Encoder**: LSTM that processes questions
+- **Attention**: Mechanism to focus on relevant input parts
+- **Decoder**: LSTM that generates answers
+- **Training**: 50 epochs with teacher forcing
+- **Loss**: Cross-entropy with gradient clipping
+- **Optimizer**: Adam with learning rate 0.001
+
+
+## Example Usage
+
+```python
+from ai_model import PersonalAIModel
+
+model = PersonalAIModel()
+
+# The model generates responses using the trained neural network
+model.answer("What are Vagelis skills?")
+# Neural network output: "I have expertise in java (11, 17, 21), spring boot, c++, sql, python..."
+
+model.answer("Where do you work?")  
+# Neural network output: "I currently work as a full stack developer at netcompany-intrasoft..."
+
+model.answer("Does he know Java?")
+# Neural network output: "I work with java (11, 17, 21), spring boot, c++ and more"
 ```
-
-**Run tests** to verify everything works:
-```bash
-python test_ai_model.py
-```
-
-
-## How It Works
-
-This intelligent system uses a **hybrid approach** combining multiple AI techniques for accuracy:
-
-### 1. Question Analysis
-- Normalizes and processes the input question
-- Identifies question type (CV-specific vs. general knowledge)
-- Removes punctuation and standardizes text
-
-### 2. Smart Matching System
-- **Direct matching**: Exact phrase matching for common questions
-- **Semantic similarity**: Word overlap scoring for related questions  
-- **Pattern recognition**: Identifies question patterns and intents
-- **Length-weighted scoring**: Prioritizes more specific matches
-
-### 3. Multi-Source Responses
-- **CV Knowledge Base**: Structured data from resume (experience, skills, education)
-- **Q&A Pairs**: 38+ pre-defined question-answer pairs
-- **General Knowledge**: Tech definitions, math, geography
-- **Conversational**: Greetings and natural interactions
-
-### 4. Response Generation
-- Selects best match from knowledge base
-- Searches structured CV data if needed
-- Falls back to general knowledge rules
-- Provides helpful fallback messages
-
-### Architecture Benefits
-| Feature | This System |
-|---------|-------------|
-| Accuracy | ✅ High - uses curated data |
-| Response Time | ✅ Instant |
-| Reliability | ✅ Consistent answers |
-| Greetings | ✅ Natural conversation |
-| CV Questions | ✅ 100% accurate |
-| Setup | ✅ No training needed |
 
 ## Installation
 
