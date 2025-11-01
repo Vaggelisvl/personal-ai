@@ -284,7 +284,7 @@ def create_training_data():
     return pairs
 
 
-def train_model(output_dir="./cv_seq2seq_model", num_epochs=40, batch_size=16):
+def train_model(output_dir="./cv_seq2seq_model", num_epochs=200, batch_size=8):
     """Train the seq2seq model"""
     
     print("=" * 80)
@@ -295,10 +295,10 @@ def train_model(output_dir="./cv_seq2seq_model", num_epochs=40, batch_size=16):
     print("\n1. Creating training data...")
     pairs = create_training_data()
     
-    # Augment by adding each pair multiple times
+    # Augment by adding each pair multiple times for comprehensive learning
     augmented = []
     for q, a in pairs:
-        for _ in range(2):  # 2x augmentation for faster training
+        for _ in range(5):  # 5x augmentation for thorough learning
             augmented.append((q, a))
     pairs = augmented
     
@@ -360,7 +360,7 @@ def train_model(output_dir="./cv_seq2seq_model", num_epochs=40, batch_size=16):
             
             total_loss += loss.item()
         
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 20 == 0:
             avg_loss = total_loss / (len(train_data) / batch_size)
             print(f"   Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
     
