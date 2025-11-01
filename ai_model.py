@@ -1,89 +1,52 @@
 """
-Real AI Model - Seq2Seq with Attention trained on CV data
-This is a genuine neural network that learns to answer questions through training
+Real AI Model - Fine-tuned GPT-2 on CV data
+This is a genuine transformer-based neural network fine-tuned on CV Q&A data
 """
 
 import torch
-import json
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import os
-import sys
-
-# Import the model architecture
-sys.path.insert(0, os.path.dirname(__file__))
-from train_seq2seq import Seq2SeqModel, Tokenizer as TrainTokenizer
-
-
-class Tokenizer:
-    """Tokenizer for inference"""
-    def __init__(self, word2idx, idx2word, vocab_size):
-        self.word2idx = word2idx
-        self.idx2word = idx2word
-        self.vocab_size = vocab_size
-    
-    def encode(self, text, max_length=50):
-        words = text.lower().split()
-        indices = [self.word2idx.get('<SOS>', 1)]
-        for word in words[:max_length-2]:
-            indices.append(self.word2idx.get(word, self.word2idx.get('<UNK>', 3)))
-        indices.append(self.word2idx.get('<EOS>', 2))
-        return indices
-    
-    def decode(self, indices):
-        words = []
-        for idx in indices:
-            if idx == self.word2idx.get('<EOS>', 2) or idx == self.word2idx.get('<PAD>', 0):
-                break
-            if idx != self.word2idx.get('<SOS>', 1):
-                word = self.idx2word.get(str(idx), '<UNK>')
-                if word not in ['<UNK>', '<PAD>']:
-                    words.append(word)
-        return ' '.join(words)
+import json
 
 
 class PersonalAIModel:
     """
-    Real AI model using Seq2Seq with Attention - trained neural network
+    Real AI model using fine-tuned GPT-2 - transformer-based neural network
     """
     
-    def __init__(self, model_path="./cv_seq2seq_model"):
+    def __init__(self, model_path="./cv_gpt2_model"):
         self.model_path = model_path
         self.model = None
         self.tokenizer = None
         
-        if os.path.exists(model_path) and os.path.exists(f"{model_path}/model.pt"):
+        if os.path.exists(model_path) and os.path.exists(f"{model_path}/pytorch_model.bin"):
             self._load_model()
         else:
             print(f"❌ Model not found at {model_path}")
-            print("Please run 'python train_seq2seq.py' first to train the model.")
+            print("Please run 'python train_gpt2.py' first to train the model.")
+            print("Training will take 10-20 minutes.")
     
     def _load_model(self):
-        """Load the trained seq2seq model"""
+        """Load the fine-tuned GPT-2 model"""
         try:
-            print(f"Loading Seq2Seq model from {self.model_path}...")
+            print(f"Loading fine-tuned GPT-2 model from {self.model_path}...")
             
-            # Load config
-            with open(f"{self.model_path}/config.json", 'r') as f:
-                config = json.load(f)
-            
-            # Load tokenizer
-            with open(f"{self.model_path}/tokenizer.json", 'r') as f:
-                tok_data = json.load(f)
-            
-            self.tokenizer = Tokenizer(
-                tok_data['word2idx'],
-                tok_data['idx2word'],
-                tok_data['vocab_size']
-            )
-            
-            # Load model
-            self.model = Seq2SeqModel(config['vocab_size'])
-            self.model.load_state_dict(torch.load(f"{self.model_path}/model.pt", 
-                                                   map_location=torch.device('cpu')))
+            # Load tokenizer and model
+            self.tokenizer = GPT2Tokenizer.from_pretrained(self.model_path)
+            self.model = GPT2LMHeadModel.from_pretrained(self.model_path)
             self.model.eval()
             
-            print(f"✅ Seq2Seq model loaded!")
-            print(f"   Architecture: {config.get('architecture', 'Seq2Seq with Attention')}")
-            print(f"   Vocabulary: {config['vocab_size']} tokens")
+            # Load training info if available
+            info_path = f"{self.model_path}/training_info.json"
+            if os.path.exists(info_path):
+                with open(info_path, 'r') as f:
+                    info = json.load(f)
+                print(f"✅ GPT-2 model loaded!")
+                print(f"   Architecture: Fine-tuned {info.get('model_type', 'GPT-2')}")
+                print(f"   Training pairs: {info.get('num_training_pairs', 'N/A')}")
+                print(f"   Vocabulary: {info.get('vocab_size', len(self.tokenizer))} tokens")
+            else:
+                print(f"✅ GPT-2 model loaded!")
             
         except Exception as e:
             print(f"❌ Error loading model: {e}")
@@ -91,13 +54,13 @@ class PersonalAIModel:
             traceback.print_exc()
             self.model = None
     
-    def answer(self, question: str, max_length: int = 60) -> str:
+    def answer(self, question: str, max_new_tokens: int = 100) -> str:
         """
-        Answer using the trained neural network
+        Answer using the fine-tuned GPT-2 model
         
         Args:
             question: The question to answer
-            max_length: Maximum length of answer
+            max_new_tokens: Maximum number of tokens to generate
             
         Returns:
             Generated answer from the neural network
@@ -106,61 +69,74 @@ class PersonalAIModel:
             return "Please ask me a question!"
         
         if self.model is None or self.tokenizer is None:
-            return "❌ Model not loaded. Please train the model with 'python train_seq2seq.py'"
+            return "❌ Model not loaded. Please train the model with 'python train_gpt2.py'"
         
         try:
-            # Encode question
-            question_enc = self.tokenizer.encode(question, max_length=30)
-            src = torch.tensor([question_enc])
+            # Format input in the same way as training
+            prompt = f"Question: {question.strip()}\nAnswer:"
             
-            # Generate answer
+            # Encode input
+            inputs = self.tokenizer.encode(prompt, return_tensors="pt")
+            
+            # Set pad token
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+            # Generate response
             self.model.eval()
             with torch.no_grad():
-                # Encode
-                encoder_outputs, hidden, cell = self.model.encoder(src)
+                outputs = self.model.generate(
+                    inputs,
+                    max_new_tokens=max_new_tokens,
+                    num_return_sequences=1,
+                    temperature=0.7,  # Slightly creative but focused
+                    top_p=0.9,  # Nucleus sampling
+                    top_k=50,  # Top-k sampling
+                    do_sample=True,
+                    pad_token_id=self.tokenizer.pad_token_id,
+                    eos_token_id=self.tokenizer.eos_token_id,
+                    repetition_penalty=1.2,  # Avoid repetition
+                )
+            
+            # Decode response
+            full_response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            
+            # Extract just the answer part
+            if "Answer:" in full_response:
+                answer = full_response.split("Answer:")[-1].strip()
                 
-                # Start decoding
-                outputs = [self.tokenizer.word2idx.get('<SOS>', 1)]
+                # Clean up if there's another "Question:" in the response
+                if "Question:" in answer:
+                    answer = answer.split("Question:")[0].strip()
                 
-                for _ in range(max_length):
-                    input_token = torch.tensor([[outputs[-1]]])
-                    
-                    prediction, hidden, cell, _ = self.model.decoder(
-                        input_token, hidden, cell, encoder_outputs
-                    )
-                    
-                    # Get best token
-                    top_token = prediction.argmax(1).item()
-                    outputs.append(top_token)
-                    
-                    # Stop if EOS
-                    if top_token == self.tokenizer.word2idx.get('<EOS>', 2):
-                        break
+                # Remove any remaining special tokens or artifacts
+                answer = answer.replace("<|endoftext|>", "").strip()
                 
-                # Decode
-                answer = self.tokenizer.decode(outputs)
-                
-                if answer and len(answer.strip()) > 0:
-                    # Capitalize first letter
-                    answer = answer.strip()
-                    if answer:
-                        answer = answer[0].upper() + answer[1:] if len(answer) > 1 else answer.upper()
+                if answer and len(answer) > 0:
+                    # Ensure answer ends with proper punctuation
+                    if answer and answer[-1] not in ['.', '!', '?']:
+                        answer += '.'
                     return answer
                 else:
-                    return "I don't have enough training data to answer that question accurately."
+                    return "I don't have enough information to answer that question accurately."
+            else:
+                return "I couldn't generate a proper response. Please try rephrasing your question."
                 
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error during generation: {e}")
+            import traceback
+            traceback.print_exc()
+            return f"Error generating response: {str(e)}"
     
     def get_cv_summary(self) -> str:
-        """Get CV summary"""
-        return self.answer("tell me about yourself")
+        """Get comprehensive CV summary"""
+        return self.answer("Tell me about yourself and your background")
 
 
 def main():
     """Interactive demo"""
     print("=" * 80)
-    print("Real AI Model - Seq2Seq with Attention")
+    print("Real AI Model - Fine-tuned GPT-2")
     print("=" * 80)
     
     model = PersonalAIModel()
@@ -168,10 +144,11 @@ def main():
     if model.model is None:
         print("\n⚠️  Model not found!")
         print("\nTrain the model first:")
-        print("  python train_seq2seq.py")
+        print("  python train_gpt2.py")
+        print("\nThis will fine-tune a GPT-2 model on your CV data (takes 10-20 minutes).")
         return
     
-    print("\nThis is a real trained neural network (Seq2Seq with Attention).")
+    print("\nThis is a real fine-tuned transformer model (GPT-2).")
     print("\nType 'quit' to exit, 'summary' for CV summary.")
     print("=" * 80)
     
