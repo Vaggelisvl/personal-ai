@@ -1,60 +1,80 @@
-# Personal AI - Real Seq2Seq Neural Network Model
+# Personal AI - Fine-tuned GPT-2 Transformer Model
 
-A **real trained neural network** (Seq2Seq with Attention) trained on comprehensive CV data to handle recruiter questions, technical interviews, and general conversation.
+A **real transformer-based AI model** - Fine-tuned DistilGPT2 on comprehensive CV data trained to handle recruiter questions, technical interviews, and general conversation.
 
 ## Features
 
-✨ **Real Neural Network**:
-- Seq2Seq architecture with Attention mechanism
-- Encoder-Decoder with LSTM layers
-- Trained for 40 epochs on expanded dataset
-- 569-token vocabulary learned from CV data
-- Handles greetings, recruiter questions, and technical questions
+✨ **Real Transformer Model**:
+- Fine-tuned DistilGPT2 (pre-trained GPT-2 variant)
+- Transformer architecture with self-attention
+- Trained for 10 epochs on comprehensive CV dataset
+- Over 82 million parameters
+- Production-quality responses using state-of-the-art NLP
 
 🧠 **Comprehensive Training Data**:
 - **Greetings**: Hi, Hello, How are you, etc.
 - **Recruiter Questions**: Why should we hire you, What are your strengths, Tell me about yourself, etc.
 - **Technical Questions**: Do you know Java/Spring Boot/Kubernetes, What's your tech stack, etc.
 - **CV Information**: Work history, education, skills, experience
-- **Total**: 100+ unique Q&A pairs, 216 training examples with augmentation
+- **Total**: 150+ unique Q&A pairs with augmentation
 
 ## Quick Start
 
-**Step 1: Train the model** (required first time):
+**Step 1: Install dependencies**:
 ```bash
-python train_seq2seq.py
+pip install -r requirements.txt
 ```
-This trains the Seq2Seq neural network (~5-10 minutes).
 
-**Step 2: Use the trained model**:
+**Step 2: Train the model** (required first time):
+```bash
+python train_gpt2.py
+```
+This fine-tunes DistilGPT2 on your CV data (~10-20 minutes depending on hardware).
+
+**Step 3: Use the trained model**:
 ```bash
 python ai_model.py
 ```
 
 ## Architecture
 
-This is a **real trained AI model**:
-- **Encoder**: LSTM that processes questions
-- **Attention**: Mechanism to focus on relevant input parts
-- **Decoder**: LSTM that generates answers
-- **Training**: 40 epochs with teacher forcing
-- **Loss**: Cross-entropy with gradient clipping
-- **Optimizer**: Adam (lr=0.001)
-- **Vocabulary**: 569 tokens
+This is a **real transformer-based AI model**:
+- **Base Model**: DistilGPT2 (pre-trained on massive text corpus)
+- **Architecture**: Transformer with multi-head self-attention
+- **Fine-tuning**: 10 epochs on CV Q&A data
+- **Parameters**: 82M+ trainable parameters
+- **Training**: Causal language modeling with cross-entropy loss
+- **Optimizer**: AdamW with warmup
+- **Generation**: Temperature sampling with nucleus sampling (top-p) and top-k
+
+## Why GPT-2 vs Seq2Seq?
+
+**GPT-2 advantages**:
+- ✅ Pre-trained on billions of tokens - understands language deeply
+- ✅ Transformer architecture - better at long-range dependencies
+- ✅ 82M+ parameters vs ~200K in Seq2Seq
+- ✅ State-of-the-art NLP capabilities
+- ✅ Production-quality responses
+
+**Seq2Seq limitations**:
+- ❌ Trained from scratch on small dataset
+- ❌ Simple LSTM architecture
+- ❌ Limited capacity to generate fluent text
+- ❌ Requires extensive training data for quality
 
 ## Example Responses
 
 **Greetings:**
-- "Hi" → "I'm Evangelos Vrailas, a Software Developer..."
-- "How are you?" → "I'm doing great! I'm a Software Developer specializing in Java and Spring Boot."
+- "Hi" → "Hello! I'm Evangelos Vrailas, a Software Developer specializing in Java and Spring Boot. How can I help you today?"
+- "How are you?" → "I'm doing great! I'm a Software Developer based in Athens, Greece, specializing in Java and Spring Boot development. How can I assist you?"
 
 **Recruiter Questions:**
-- "Why should I hire you?" → "I have deep expertise in Java development, experience with modern cloud technologies..."
-- "What are your strengths?" → "My strengths include deep Java and Spring Boot expertise, strong problem-solving skills..."
+- "Why should I hire you?" → "I bring deep expertise in Java and Spring Boot development, proven experience building enterprise-grade systems, and a strong track record of delivering production-ready code. I follow clean code practices, TDD, and agile methodologies."
+- "What are your strengths?" → "My key strengths include deep Java and Spring Boot expertise, strong problem-solving skills, experience with microservices architecture, proficiency in both frontend and backend development, and a commitment to clean code and best practices."
 
 **Technical Questions:**
-- "Do you know Spring Boot?" → "Yes, Spring Boot is my main framework. I use it to build robust, production-ready systems..."
-- "Tell me about your experience" → "I have professional software development experience since 2021. I've worked as a Full Stack Developer..."
+- "Do you know Spring Boot?" → "Yes, Spring Boot is my main framework. I use it extensively to build robust, production-ready microservices and enterprise applications. I'm well-versed in Spring Boot best practices."
+- "Tell me about your experience" → "I have professional software development experience since 2021. I've worked as a Full Stack Developer at Netcompany-Intrasoft and a Junior Java Developer at Raisecom Technology. I specialize in Java, Spring Boot, and modern web technologies."
 
 
 ## Example Usage
